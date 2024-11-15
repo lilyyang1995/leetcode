@@ -1,0 +1,97 @@
+# 1. 最基础的滑动窗口模板
+def basic_sliding_window(nums, k):
+    n = len(nums)
+    if n == 0:
+        return 0
+        
+    left = curr_sum = 0
+    result = float('-inf')  # 或 float('inf')，取决于求最大还是最小
+    
+    for right in range(n):
+        # 1. 扩大窗口，加入right位置的元素
+        curr_sum += nums[right]
+        
+        # 2. 当窗口大小大于k时，缩小窗口
+        if right - left + 1 > k:
+            curr_sum -= nums[left]
+            left += 1
+            
+        # 3. 更新结果
+        if right - left + 1 == k:
+            result = max(result, curr_sum)  # 或用min()
+            
+    return result
+
+# 2. 求和类型的滑动窗口模板
+def sum_sliding_window(nums, target):
+    n = len(nums)
+    if n == 0:
+        return 0
+        
+    left = curr_sum = 0
+    result = float('inf')  # 根据题目调整初始值
+    
+    for right in range(n):
+        # 1. 扩大窗口
+        curr_sum += nums[right]
+        
+        # 2. 缩小窗口直到不满足条件
+        while curr_sum >= target:  # 根据题目调整条件
+            result = min(result, right - left + 1)
+            curr_sum -= nums[left]
+            left += 1
+            
+    return result if result != float('inf') else 0
+
+# 3. 字符串/字典类型的滑动窗口模板
+def string_sliding_window(s, target):
+    from collections import Counter
+    need = Counter(target)    # 需要的字符及其数量
+    window = Counter()        # 当前窗口中的字符及其数量
+    left = valid = 0         # valid记录已经满足要求的字符数
+    result = float('inf')    # 根据题目调整
+    
+    for right in range(len(s)):
+        # 1. 扩大窗口
+        c = s[right]
+        if c in need:
+            window[c] += 1
+            if window[c] == need[c]:
+                valid += 1
+        
+        # 2. 判断是否要收缩窗口
+        while valid == len(need):  # 根据题目调整条件
+            # 更新结果
+            result = min(result, right - left + 1)
+            
+            # 缩小窗口
+            d = s[left]
+            left += 1
+            if d in need:
+                if window[d] == need[d]:
+                    valid -= 1
+                window[d] -= 1
+                
+    return result if result != float('inf') else 0
+
+# 4. 不定长度的滑动窗口模板（求最长子串/子数组）
+def variable_sliding_window(nums):
+    n = len(nums)
+    left = curr_sum = 0
+    result = 0
+    window = set()  # 或使用dict()，根据需求选择数据结构
+    
+    for right in range(n):
+        # 1. 处理右边界，直到不满足条件
+        while condition_not_met:  # 根据题目调整条件
+            # 处理左边界
+            remove_element(left)  # 根据题目调整处理方式
+            left += 1
+            
+        # 2. 添加右边界元素
+        add_element(right)  # 根据题目调整处理方式
+        
+        # 3. 更新结果
+        result = max(result, right - left + 1)
+        
+    return result
